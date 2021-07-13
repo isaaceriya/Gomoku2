@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class Gameplay {
     private static Scanner scanner = new Scanner( System.in );
-    public String[][] stones = new String[16][16];
-    public static Menu menu = new Menu();
+    private String[][] stones = new String[16][16];
+    private Menu menu = new Menu();
     private final Random random = new Random();
 //    private HumanPlayer humanPlayer;
     private Player one;
@@ -57,7 +57,7 @@ public class Gameplay {
 
 
 
-    public void printworld() {
+    private void printworld() {
         for(int i = 0; i <= 15; i++){ //row
             for(int j = 0; j<=15; j++){ //Col
                 if(j == 0){
@@ -69,7 +69,7 @@ public class Gameplay {
 
     }
 
-    public void setupstones(){
+    private void setupstones(){
         stones[0][0] = "  ";
         for(int i = 1; i <= 15; i++) {
             if (i < 10) {
@@ -91,7 +91,7 @@ public class Gameplay {
 
 
 
-    public boolean checkmove(List<Stone> previousMoves){
+    private boolean checkmove(List<Stone> previousMoves){
         boolean isBlack = true;
         if (previousMoves != null && !previousMoves.isEmpty()) {
             Stone lastMove = previousMoves.get(previousMoves.size() - 1);
@@ -101,7 +101,7 @@ public class Gameplay {
 
     }
 
-    public void swap(){
+    private void swap(){
         if (turn == one){
             turn = two;
         }else{
@@ -110,7 +110,7 @@ public class Gameplay {
 
     }
 
-    public void generatemove(){
+    private void generatemove(){
         boolean isBlack = checkmove(game.getStones());
         ranx = random.nextInt(Gomoku.WIDTH);
         rany = random.nextInt(Gomoku.WIDTH);
@@ -131,7 +131,7 @@ public class Gameplay {
         }
     }
 
-    public void move(){
+    private void move(){
         boolean isBlack = checkmove(game.getStones());
         System.out.print("Enter a row");
         int row = scanner.nextInt();
@@ -153,7 +153,7 @@ public class Gameplay {
         }
     }
 
-    public void restartquest(){
+    private void restartquest(){
         Scanner myObj = new Scanner(System.in);
         System.out.print("Play Again? [y/n]: ");
         String  option = myObj.nextLine();
@@ -165,7 +165,7 @@ public class Gameplay {
             System.out.println("goodbye");
         }
     }
-    public void restart(){
+    private void restart(){
         one = menu.playersetup(1);
         two = menu.playersetup(2);
         game = new Gomoku(one, two);
@@ -174,7 +174,7 @@ public class Gameplay {
         run();
     }
 
-    public void gameover(){
+    private void gameover(){
         swap();
         System.out.println(turn.getName() + " has won");
         restartquest();
