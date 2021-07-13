@@ -21,16 +21,15 @@ public class Menu {
                     "2.Random player"+"\n"+
                     "Select [1-2]: ");
             int option = scanner.nextInt();
-            if (option == 1){
-                System.out.print("Enter Player"+ i + " Name: ");
-                Player one = new HumanPlayer(myObj.nextLine());
-                return one;
-            }else if(option == 2){
-                Player one = randomPlayer();
-                return one;
-            }
-
-        return one;
+                if (option == 1){
+                    System.out.print("Enter Player"+ i + " Name: ");
+                    one = new HumanPlayer(myObj.nextLine());
+                    return one;
+                }else if(option == 2){
+                     one = randomPlayer();
+                     return one;
+                }
+            return null;
     }
 
     public Player randomPlayer(){

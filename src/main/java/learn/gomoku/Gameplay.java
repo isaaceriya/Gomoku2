@@ -4,20 +4,22 @@ import learn.gomoku.game.Stone;
 import learn.gomoku.game.Result;
 import learn.gomoku.players.HumanPlayer;
 import learn.gomoku.players.Player;
-
+import java.util.Random;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Gameplay {
     private static Scanner scanner = new Scanner( System.in );
     public String[][] stones = new String[16][16];
     public static Menu menu = new Menu();
+    private final Random random = new Random();
+//    private HumanPlayer humanPlayer;
     private Player one;
     private Player two;
-    private Player winner;
     private Gomoku game;
     private Player turn;
+    public int ranx = random.nextInt(Gomoku.WIDTH);
+    public int rany = random.nextInt(Gomoku.WIDTH);
 
 
     public Gameplay(){
@@ -31,12 +33,29 @@ public class Gameplay {
 
     public void run() {
         while(!game.isOver()) {
+            Stone stone = game.getCurrent().generateMove(game.getStones());
             System.out.println("It's " + turn.getName() + " Turn");
-            move();
-            printworld();
-            System.out.println(" ");
-        }
+            if (stone == null){
+                move();
+                printworld();
+                System.out.println(" ");
+//                System.out.println("It's " + turn.getName() + " Turn");
+
+
+            } else{
+                if (checkmove(game.getStones()));{
+                    generatemove();
+                    printworld();
+                    System.out.println(" ");
+//                    System.out.println("It's " + turn.getName() + " Turn");
+                }
+            }
+        } gameover();
     }
+
+
+
+
 
     public void printworld() {
         for(int i = 0; i <= 15; i++){ //row
@@ -68,6 +87,10 @@ public class Gameplay {
         }
     }
 
+
+
+
+
     public boolean checkmove(List<Stone> previousMoves){
         boolean isBlack = true;
         if (previousMoves != null && !previousMoves.isEmpty()) {
@@ -87,6 +110,27 @@ public class Gameplay {
 
     }
 
+    public void generatemove(){
+        boolean isBlack = checkmove(game.getStones());
+        ranx = random.nextInt(Gomoku.WIDTH);
+        rany = random.nextInt(Gomoku.WIDTH);
+        Result actual = game.place(new Stone(ranx-1 , rany-1, isBlack));
+        Result expected = new Result("The stone is in the wrong position");
+        if(expected != actual){
+            if(actual.isSuccess()){
+                if(isBlack){
+                    stones[ranx][rany] = " X ";
+
+                } else{
+                    stones[ranx][rany] = " O ";
+                }
+                swap();
+            }else{
+                System.out.println(expected.getMessage());
+            }
+        }
+    }
+
     public void move(){
         boolean isBlack = checkmove(game.getStones());
         System.out.print("Enter a row");
@@ -97,11 +141,7 @@ public class Gameplay {
         Result expected = new Result("The stone is in the wrong position");
         if(expected != actual){
             if(actual.isSuccess()){
-                if(game.isOver()){
-                    winner = game.getWinner();
-                    System.out.println(turn.getName() + " has won");
-                    restartquest();
-                }if(isBlack){
+                if(isBlack){
                     stones[row][column] = " X ";
                 } else{
                     stones[row][column] = " O ";
@@ -132,6 +172,12 @@ public class Gameplay {
         turn = game.getCurrent();
         setupstones();
         run();
+    }
+
+    public void gameover(){
+        swap();
+        System.out.println(turn.getName() + " has won");
+        restartquest();
     }
 }
 
